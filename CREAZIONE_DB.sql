@@ -4,10 +4,8 @@ use floraitaliana;
 create table Pianta(
 ID INT primary key auto_increment,
 nome_comune varchar(50) not null,
-tipo_corologico_codice INT not null,
-forma_biologica_codice INT not null, 
-forma_biologica_sigla varchar(16) not null,
-tipo_corologico_sigla varchar(16) not null
+tipo_corologico INT not null,
+forma_biologica varchar(8) not null
 );
 
 create table Tassonomia(
