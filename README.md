@@ -1,1 +1,8 @@
-# databasefloraitaliana
+\section{Descrizione del progetto}
+Si vuole realizzare una base di dati che contenga informazioni relative alla flora presente sul territorio italiano. Lo scopo del database è divulgativo, esso mira a far conoscere la ricchezza della flora italiana e sensibilizzare sul tema della biodiversità. \newline
+Per fare ciò abbiamo bisogno di memorizzare per ogni pianta, oltre al suo nome scientifico e al nome comune in italiano informazioni riguardanti la tassonomia, questa include: classe, ordine, famiglia, sotto-famiglia, genere e specie. Inoltre per seguire un approccio scientifico si decide di utilizzare la classificazione di Raunkiær (forma Biologica) e avere informazioni precise sull'areale (tipo corologico) è sufficiente memorizzare una sigla per la prima e un codice per il secondo. Per ogni pianta inoltre vi è un (unico) file di testo che ne contiene una breve descrizione e potrebbero esserci una o più immagini associate (potrebbero però non esserci immagini).\newline
+Si è interessati a conoscere la distribuzione della flora a livello Regionale per cui è necessario tenere traccia di tutte le piante presenti in ogni regione, assieme a questa informazione si riporta il nome regionale della pianta (che può essere diverso da quello comune in italiano) e una informazione riassuntiva sulla diffusione della pianta in quella regione (comune, rara o rarissima). \newline
+Teniamo traccia di tutti i parchi botanici in Italia, di questi indichiamo la città in cui il parco si trova, il nome del parco, l'indirizzo
+(via e CAP) e la superficie. Registrimao inoltre tutte le piante conservate in quel parco. \newline
+Infine per lo scopo del database è necessario riportare le liste rosse dell'IUCN\cite{ListaRossa}: queste indicano la categoria di minaccia per una data pianta e l'informazione sull'endemicità (endemica o meno).
+\section{Indicazioni su i dati}
