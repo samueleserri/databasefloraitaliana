@@ -1,81 +1,82 @@
-create database if not exists floraitaliana;
-use floraitaliana;
+CREATE DATABASE IF NOT EXISTS floraitaliana;
+USE floraitaliana;
 
-create table Pianta(
-ID INT primary key auto_increment,
-nome_comune varchar(50) not null,
-tipo_corologico INT not null,
-forma_biologica varchar(8) not null
+CREATE TABLE Pianta (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    nome_comune VARCHAR(50) NOT NULL,
+    tipo_corologico INT NOT NULL,
+    forma_biologica VARCHAR(10) NOT NULL,
+    CHECK (forma_biologica IN
+    ('NP', 'P scap', 'P caespn', 'P liann', 'P succ', 'P ep', 'P rept',
+	'Ch suffr', 'Ch scap', 'Ch succ', 'Ch pulv', 'Ch frut', 'Ch rept',
+	'H caesp', 'H rept', 'H scap', 'H ros', 'H bienn', 'H scand',
+	'G rad', 'G bulb', 'G rhiz', 'G par', 'I rad', 'I nat',
+	'T caesp', 'T rept', 'T scap', 'T ros', 'T par'))
 );
 
-create table Tassonomia(
-Pianta int primary key,
-classe varchar(50) not null,
-ordine varchar(50) not null,
-famiglia varchar(50) not null,
-sotto_famiglia varchar(50) not null,
-genere varchar(50) not null,
-specie varchar(50) not null,
-foreign key (Pianta) references Pianta (ID)
+CREATE TABLE Tassonomia (
+    pianta INT PRIMARY KEY,
+    classe VARCHAR(50) NOT NULL,
+    ordine VARCHAR(50) NOT NULL,
+    famiglia VARCHAR(50) NOT NULL,
+    sotto_famiglia VARCHAR(50) NOT NULL,
+    genere VARCHAR(50) NOT NULL,
+    specie VARCHAR(50) NOT NULL,
+    FOREIGN KEY (pianta) REFERENCES Pianta(ID)
 );
 
-create table Regione(
-nome_regione varchar(30) primary key
+CREATE TABLE Regione (
+    nome_regione VARCHAR(30) PRIMARY KEY
 );
 
-create table Parco_Botanico (
-Regione varchar(30) not null,
-nome_parco varchar(255) not null,
-città varchar(50) not null,
-via varchar(255) not null,
-cap int not null,
-superficie float,
-primary key (nome_parco, città),
-foreign key (Regione) references Regione(nome_regione)
+CREATE TABLE Parco_Botanico (
+    regione VARCHAR(30) NOT NULL,
+    nome_parco VARCHAR(255) NOT NULL,
+    citta VARCHAR(50) NOT NULL,
+    via VARCHAR(255) NOT NULL,
+    cap VARCHAR(10) NOT NULL,
+    superficie FLOAT,
+    PRIMARY KEY (nome_parco, citta),
+    FOREIGN KEY (regione) REFERENCES Regione(nome_regione)
 );
 
-create table Immagine (
-path varchar(255) primary key
+CREATE TABLE Immagine (
+    pianta INT NOT NULL,
+    percorso VARCHAR(255) PRIMARY KEY,
+    FOREIGN KEY (pianta) REFERENCES Pianta(ID)
 );
 
-create table Descrizione (
-Pianta int not null,
-path varchar(255) primary key,
-foreign key (Pianta) references Pianta (ID)
+CREATE TABLE Lista_Rossa (
+    pianta INT NOT NULL, 
+    categoria VARCHAR(10) NOT NULL,
+    endemicita BOOLEAN NOT NULL,
+    PRIMARY KEY (pianta),
+    FOREIGN KEY (pianta) REFERENCES Pianta(ID),
+    CHECK (categoria IN ('EX', 'RE', 'EW', 'CR[PE]', 'CR', 'EN', 'VU', 'NT', 'LC', 'DD'))
 );
 
-create table lista_rossa (
-Pianta int not null, 
-categoria varchar(8) not null,
-endemicità bool not null,
-primary key(pianta),
-foreign key (Pianta) references Pianta (ID)
+CREATE TABLE Distribuzione (
+    pianta INT NOT NULL, 
+    regione VARCHAR(30) NOT NULL, 
+    status VARCHAR(24), 
+    nome_locale VARCHAR(50),
+    PRIMARY KEY (pianta, regione),
+    FOREIGN KEY (pianta) REFERENCES Pianta(ID),
+    FOREIGN KEY (regione) REFERENCES Regione(nome_regione)
 );
 
-create table Distribuzione(
-pianta int not null, 
-regione varchar(30) not null, 
-status varchar(24), 
-nome_locale varchar(50),
-primary key(pianta,regione),
-foreign key (Pianta) references Pianta (ID),
-foreign key (Regione) references Regione(nome_regione)
+CREATE TABLE Descrizione (
+    pianta INT NOT NULL, 
+    percorso VARCHAR(255) NOT NULL, 
+    PRIMARY KEY (percorso), 
+    FOREIGN KEY (pianta) REFERENCES Pianta(ID)
 );
 
-create table Documentazione(
-pianta int not null, 
-immagine varchar(255) not null, 
-primary key (pianta, immagine), 
-foreign key (Pianta) references Pianta (ID), 
-foreign key (immagine) references Immagine (path)
+CREATE TABLE Conservazione (
+    pianta INT NOT NULL, 
+    nome_parco VARCHAR(255) NOT NULL, 
+    citta VARCHAR(50) NOT NULL,
+    PRIMARY KEY (pianta, nome_parco, citta), 
+    FOREIGN KEY (pianta) REFERENCES Pianta(ID),
+    FOREIGN KEY (nome_parco, citta) REFERENCES Parco_Botanico(nome_parco, citta)
 );
-
-create table conservazione(
-pianta int not null, 
-nome_parco varchar(255) not null, 
-città varchar(50) not null,
-primary key(pianta, nome_parco, città), 
-foreign key (Pianta) references Pianta (ID),
-foreign key (nome_parco, città) references Parco_Botanico(nome_parco, città)
-);
-
