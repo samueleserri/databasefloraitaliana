@@ -50,7 +50,7 @@ inner join
 on 
 	   Tassonomia.pianta = Pianta.id
 inner join
-    Descrzione
+    Descrizione
 on 
     Pianta.id = Descrizione.pianta
 Inner join
