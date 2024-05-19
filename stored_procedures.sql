@@ -32,36 +32,32 @@ and
 END $$
 DELIMITER ;
 
-
 DELIMITER $$
-CREATE PROCEDURE mostra_immagini(
-    in class varchar(50),
-    in ord varchar(50),
-    in fam varchar(50), 
-    in subfam varchar(50), 
-    in gen varchar(50))
+
+CREATE PROCEDURE mostra_immagini_e_descrizione(
+    IN p_classe VARCHAR(50),
+    IN p_ordine VARCHAR(50),
+    IN p_famiglia VARCHAR(50), 
+    IN p_sotto_famiglia VARCHAR(50), 
+    IN p_genere VARCHAR(50))
 BEGIN
-select 
-	   Immagine.percorso, Descrizione.percorso
-from 
-	   Tassonomia
-inner join 
-	   Pianta
-on 
-	   Tassonomia.pianta = Pianta.id
-inner join
-    Descrizione
-on 
-    Pianta.id = Descrizione.pianta
-Inner join
-	   Immagine
-on 
-	   Pianta.id = Immagine.pianta
-where 
-    	classe = class and
-        ordine = ord and
-        famiglia = fam and
-        sotto_famiglia = subfam and
-        genere = gen;
+    SELECT 
+        Immagine.percorso AS img_percorso, 
+        Descrizione.percorso AS desc_percorso
+    FROM 
+        Tassonomia
+    INNER JOIN 
+        Pianta ON Tassonomia.pianta = Pianta.id
+    INNER JOIN
+        Descrizione ON Pianta.id = Descrizione.pianta
+    INNER JOIN
+        Immagine ON Pianta.id = Immagine.pianta
+    WHERE 
+        (p_classe IS NULL OR classe = p_classe) AND
+        (p_ordine IS NULL OR ordine = p_ordine) AND
+        (p_famiglia IS NULL OR famiglia = p_famiglia) AND
+        (p_sotto_famiglia IS NULL OR sotto_famiglia = p_sotto_famiglia) AND
+        (p_genere IS NULL OR genere = p_genere);
 END $$
+
 DELIMITER ;
