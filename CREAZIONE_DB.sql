@@ -52,7 +52,7 @@ CREATE TABLE Lista_Rossa (
     endemicita BOOLEAN NOT NULL,
     PRIMARY KEY (pianta),
     FOREIGN KEY (pianta) REFERENCES Pianta(ID),
-    CHECK (categoria IN ('EX', 'RE', 'EW', 'CR[PE]', 'CR', 'EN', 'VU', 'NT', 'LC', 'DD'))
+    CHECK (categoria IN ('CR', 'EN', 'VU', 'NT', 'LC', 'DD'))
 );
 
 CREATE TABLE Distribuzione (
