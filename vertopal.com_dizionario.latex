@@ -1,0 +1,600 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{biblatex}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage[T1]{fontenc}
+\usepackage{blindtext}
+\usepackage{titlesec}
+\renewcommand*\contentsname{Indice}
+\title{Sections and Chapters}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{backcolour}{rgb}{0.96,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{orange},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage[normalem]{ulem}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\addbibresource{Bibliografia.bib}
+\title{ESAME DI BASI DI DATI}
+\author{Samuele Serri SM3201369 }
+\date{27/05/2024}
+\begin{document}
+\maketitle
+\tableofcontents
+\section{Descrizione del progetto}
+Si vuole realizzare una base di dati che contenga informazioni relative alla flora presente sul territorio italiano. Lo scopo del database è divulgativo, esso mira a far conoscere la ricchezza della flora italiana e a divulgare alcuni metodi di classificazione delle piante. \newline
+Per fare ciò abbiamo bisogno di memorizzare per ogni pianta, oltre al suo nome scientifico e al nome comune in italiano informazioni riguardanti la tassonomia, questa include: classe, ordine, famiglia, sotto-famiglia, genere e specie. Inoltre per seguire un approccio scientifico si decide di utilizzare la classificazione di Raunkiær (forma Biologica) e avere informazioni precise sull'areale (tipo corologico) è sufficiente memorizzare una sigla per la prima e un codice per il secondo. Per ogni pianta inoltre vi è un (unico) file di testo che ne contiene una breve descrizione e potrebbero esserci una o più immagini associate.\newline
+Si è interessati a conoscere la distribuzione della flora a livello Regionale per cui è necessario tenere traccia di tutte le piante presenti in ogni regione, assieme a questa informazione si riporta il nome regionale della pianta (che può essere diverso da quello comune in italiano) e una informazione riassuntiva sulla diffusione della pianta in quella regione (comune, rara o rarissima). \newline
+Teniamo traccia di tutti i parchi botanici in Italia, di questi indichiamo la città in cui il parco si trova, il nome del parco, l'indirizzo
+(via e CAP) e la superficie. Registriamo inoltre tutte le piante conservate in quel parco. \newline
+Infine per lo scopo del database è necessario riportare le liste rosse dell'IUCN\cite{ListaRossa}: queste indicano la categoria di minaccia per una data pianta e l'informazione sull'endemicità (endemica o meno).
+\section{Indicazioni sui dati}
+In questa sezione si danno indicazioni precise sulla forma di alcune informazioni alle quali si è interessati, in particolare alle informazioni sulla categoria di minaccia riportata nelle liste rosse, sul tipo corologico e sulla forma biologica.
+\begin{itemize}
+\item 
+    La categorie di minaccia sono le seguenti, tra parentesi è la sigla che viene effettivamente memorizzata nel database:
+\begin{enumerate}
+    \item Gravemente minacciata (CR)
+    \item Minacciata (EN)
+    \item Vulnerabile (VU)
+    \item Quasi minacciata (NT)
+    \item A minor rischio (LC)
+    \item Dati insufficienti (DD)
+\end{enumerate}
+\item Per la forma Biologica si segue la seguente classificazione, tra parentesi vi è il codice d'interesse.
+\begin{enumerate}
+    \item \textbf{Fanerofita:} \\
+    Nano-Fanerofita 	
+    (NP)  \\
+    Arborea 	
+    (P scap)  \\
+    Cespugliosa 	
+    (P caespn) \\
+    Lianosa 	
+    (P liann)\\ 
+    Succulenta 	
+    (P succ) \\
+    Epifita 	
+    (P ep) \\
+    Reptante 	
+    (P rept) \\
+\item \textbf{Camefita} \\
+Suffruticosa 	
+(Ch suffr) \\
+Scaposa 	
+(Ch scap)  \\
+Succulenta 	
+(Ch succ)  \\
+Pulvinata 	
+(Ch pulv) \\
+Fruticosa 	
+(Ch frut)  \\
+Reptante 	
+(Ch rept)  \\
+\item \textbf{Emicriptofita} \\
+Cespitosa 	
+(H caesp) \\
+Reptante 	
+(H rept) \\
+Scaposa 	
+(H scap)  \\
+Rosulata 	
+(H ros)  \\
+Bienne 	
+(H bienn) \\
+Scandente 	
+(H scand)  \\
+\item \textbf{Geofita} \\
+Radicegemmata 	
+(G rad)  \\
+Bulbosa 	
+(G bulb)  \\
+Rizomatosa 	
+(G rhiz) \\
+Parassita 	
+(G par) \\
+\item \textbf{Idrofita} \\
+Radicante 	
+(I rad)   \\
+Natante 	
+(I nat) \\
+\item \textbf{Terofita} \\
+Cespitosa 	
+(T caesp)  \\
+Reptante 	
+(T rept)  \\
+Scaposa 	
+(T scap)  \\
+Rosulata 	
+(T ros)  \\
+Parassita
+(T par) 
+\end{enumerate}
+\item Per il tipo corologico si fa riferimento a \cite{Pignatti} e non viene qui riportata l'intera lista. È però importante segnalare che il codice del tipo corologico associato alle piante endemiche è 1.
+\end{itemize}
+Sarà di fondamentale importanza fare dei controlli sui dati che vengono inseriti affinché rispettino queste specifiche.
+\section{Dizionario dei dati}
+\begin{itemize}
+    \item ENTITÀ:
+\end{itemize}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2499}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2499}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2501}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2501}}@{}}
+\toprule()
+\endhead
+\toprule()
+\textbf{ENTITÀ } & \textbf{DESCRIZIONE} &\textbf{ ATTRIBUTI }& \textbf{IDENTIFICATORE} \\ 
+\bottomrule()
+\toprule()
+Pianta. & Elemento di una flora. & Nome
+Comune, Nome Scientifico. & Nome Scientifico. \\ \bottomrule()
+Tassonomia. & Metodo standard per classificare le specie viventi. &
+classe, ordine, famiglia,sotto-famiglia, genere e specie. &
+ genere, specie. \\ \toprule()
+Lista Rossa. & Lista di specie a rischio pubblicata dall'IUCN. &
+Nome scientifico pianta, Endemicità, Categoria. & Nome scientifico Pianta. \\ \bottomrule()
+Tipo Corologico. & Fornisce informazioni sull'areale di una pianta. &
+Codice. & Codice. \\ \toprule()
+Forma Biologica. & sistema di classificazione per le piante basato sulla
+modalità con la quale gli organismi vegetali superano la stagione
+avversa. & Sigla. & Sigla. \\ \bottomrule()
+Regione. & Regioni politiche italiane (20). & Nome Regione. & Nome
+Regione. \\ \toprule()
+Parco Botanico. & Parco che racchiude una collezione di piante. & Nome
+parco, indirizzo(via, CAP) città, superficie. & Città, nome parco. \\ \bottomrule()
+File. & File testuali contenenti una descrizione della pianta oppure file
+immagine. & Percorso. & Percorso. \\ \toprule()
+\bottomrule()
+\end{longtable}
+\begin{itemize}
+    \item RELAZIONI
+\end{itemize}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2499}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2499}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2501}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2501}}@{}}
+\toprule()
+\bottomrule()
+\endhead
+\textbf{RELAZIONE} &\textbf{DESCRIZIONE} & \textbf{ATTRIBUTI} & \textbf{COMPONENTI} \\ \toprule() \bottomrule()
+Distribuzione. & Distribuzione regionale della flora. & Nome locale, status. & Pianta, Regione. \\ \toprule()
+Classificazione. & Classificazione tassonomica di una pianta. & & Pianta, Tassonomia. \\ \bottomrule()
+Documentazione. & File di testo e immagine associati. & & Pianta, File. \\ \toprule()
+Minaccia. & Presenza di una pianta nelle liste rosse. & & Pianta, Lista Rossa. \\ \bottomrule()
+Raunkiær. & Classificazione secondo il sistema Raunkiær.& & Pianta, Forma Biologica. \\ \toprule()
+Areale. & Informazioni sull'areale di una pianta.& & Pianta, Tipo Corologico. \\ \bottomrule()
+Conservazione. & Piante conservate in un Parco botanico. & & Pianta, Parco botanico. \\ \toprule()
+Posizione. & Ogni parco si trova in una regione. & & Regione, Parco botanico. \\ \bottomrule()
+\toprule()
+
+\end{longtable}
+\section{Tabella dei volumi}
+
+(Nota: vengono riportati gli ordini di grandezza e.g. $4 = 10^{4}$)
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3334}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3334}}@{}}
+\toprule()
+\endhead
+Pianta & E & 4 \\
+Tassonomia & E & 4 \\
+Lista Rossa & E & 3 \\
+Tipo Corologico & E & 2 \\
+Forma Biologica & E & 1 \\
+Regione & E & 1 \\
+Parco Botanico & E & 2 \\
+File & E & 4 \\
+Distribuzione & R & 4 \\
+Classificazione & R & 4 \\
+Documentazione & R & 4 \\
+Minaccia & R & 3 \\
+Raunkiær & R & 4 \\
+Areale & R & 4 \\
+Conservazione & R & 3 \\
+Posizione & R & 1 \\
+\bottomrule()
+\end{longtable}
+
+\section{Schema Concettuale}
+ \newpage
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{SCHEMA_CONCETTUALE_V3.0.jpg}
+\end{figure}
+
+ \section{Operazioni}
+\begin{enumerate}
+    \item 
+        Aggiornare annualmente le liste rosse.
+    \item
+        Filtrare le piante per Classe, ordine, famiglia, sotto-famiglia, genere, specie e mostrare le immagini associate (percorso).
+    \item 
+        Ottenere il totale delle piante endemiche in Italia, la proporzione delle specie endemiche sulle totali. Sapere quale regione ha il maggiore numero di piante endemiche.
+    \item 
+        Conoscere la proporzione di piante endemiche a rischio su quelle totali.
+    \item 
+        Elencare tutti i parchi presenti in una data regione e tutte le piante conservate in quel parco.
+\end{enumerate}
+Si noti che solo per la prima operazione è possibile dare un'indicazione precisa sulla frequenza. Questa è anche l'unica operazione di scrittura. Si decide di progettare il database in modo tale che le altre operazioni siano supportate decine di volte al giorno, in particolare si suppone che l'operazione utilizzata più di frequente sia la seconda.
+\section{Ristrutturazione dello schema concettuale}
+\subsection{Eliminazione delle generalizzazioni}
+È presente una sola generalizzazione (totale) ovvero l'entità \textit{file}, la quale si specializza in file di tipo immagine oppure file testuali. Si decide di accorpare nei figli e di creare due entità separate per la differenza di cardinalità delle due entità:il file testuale è unico mentre le immagini potrebbero essere molteplici, risulta più semplice allora creare due entità e due relazioni distinte.
+\subsection{Analisi delle ridondanze}
+Osserviamo che il nome scientifico di una pianta è presente sia nell'entità \textit{Lista Rossa} che in \textit{Pianta} inoltre esso è derivabile dalla concatenazione di Genere e Specie nell'entità \textit{Tassonomia}. Per nessuna delle operazioni è necessario che l'informazione 'nome scientifico' sia presente sia nell'entità \textit{Pianta} che nell'entità \textit{Lista Rossa} per cui si ritiene lecito rimuovere la ridondanza in entrambe le entità. Sarà necessario a questo punto introdurre un id per identificare le Piante in maniera univoca in queste due Entità. \newline
+Osserviamo inoltre che nel ciclo \textit{Pianta-Regione-Parco Botanico} vi è una differenza di cardinalità: non tutte le piante presenti in natura in una regione sono conservate in un parco e le piante conservate in un parco in una regione non sono tutte le piante presenti in natura in quella regione. \newline
+Non è perciò possibile calcolare tutte le piante presenti in un determinato parco data la Regione in cui si trova e l'elenco di piante presenti in quella regione e tanto meno risalire all'elenco delle piante di una regione dato l'elenco dei parchi e delle piante che si trovano in questi. \newline
+Infine l'attributo endemicità è ricavabile dall'entità \textit{tipo corologico} (quando questo è uguale a 1), tuttavia si decide di tenere la ridondanza poiché vi sono delle operazioni che richiedono di verificare se una data pianta minacciata è endemica o meno: Consideriamo a titolo di esempio l'operazione 4) \textit{Conoscere la proporzione di endemiche a rischio su quelle totali.} Mantenendo la ridondanza è necessario leggere solo l'entità Lista Rossa, la quale ha un volume di circa $10^3$. Eliminando la ridondanza bisogna invece leggere sia l'entità Pianta che quella lista rossa, ovvero $10^4+10^3$ accessi. Si noti che l'entità lista rossa è soggetta anche all'operazione 1)\textit{Aggiornare annualmente le liste rosse.} Tuttavia data la differenza di frequenza tra le due operazioni (più volte al giorno per la prima, una volta all'anno per la seconda) si decide di tenere la ridondanza. Si osserva infine che per mantenere l'informazione sull'endemicità nella tabella lista Rossa è sufficiente memorizzare un valore booleano.
+\subsection{Eliminazione attributi composti}
+L'attributo composto indirizzo nell'entità \textit{Parco Botanico} viene scomposto in 2 attributi semplici Via e CAP.
+\subsection{Scelta degli identificatori primari}
+{\begin{itemize}
+    \item 
+        PIANTA: avendo rimosso il nome scientifico da questa entità si introduce un ID e lo si sceglie come identificatore primario.
+    \item 
+        REGIONE: Il nome della regione può essere preso come chiave primaria.
+    \item 
+        PARCO BOTANICO: composto dalla città e dal nome del parco.
+    \item 
+        TIPO COROLOGICO: Il codice del tipo corologico.
+    \item 
+       FORMA BIOLOGICA: la sigla della forma biologica.
+    \item 
+        TASSONOMIA: Genere e specie.
+    \item 
+        IMMAGINE: Percorso file.
+    \item 
+        DESCRIZIONE: Percorso file.
+    \item 
+        LISTA ROSSA: id della pianta (esterno).
+\end{itemize}} \newpage
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{SCHEMA_CONCETTUALE_ristrutturato_V3.0.jpg}
+    \captionsetup{labelformat=empty}
+    \caption{Schema concettuale ristrutturato}
+\end{figure}
+\section{Schema logico}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{SCHEMA_LOGICO_V2.0.jpg}
+\end{figure}
+\subsection{Tabelle}
+\begin{itemize}
+    \item Pianta(\underline{id}, Nome comune, tipo corologico, forma biologica)
+    \item Tassonomia(\underline{Pianta} (FK), Classe, ordine, famiglia, sotto-famiglia, genere, specie)
+    \item Regione(\underline{nome regione})
+    \item Parco Botanico(Regione (FK) , \underline{nome parco}, \underline{città}, via, CAP, superficie)
+    \item Immagine (Pianta (FK) , \underline{path})
+    \item Descrizione (Pianta (FK), \underline{path})
+    \item Lista Rossa(\underline{Pianta} (FK), categoria, endemicità)
+    \item Distribuzione(\underline{Pianta} (FK), \underline{Regione} (FK), status, nome regionale)
+    \item Conservazione(\underline{Pianta} (FK), \underline{Parco botanico} (FK))
+\end{itemize}
+Si noti che sia la tabella \textit{Tassonomia} che la tabella \textit{Descrizione} sono in relazione uno a uno con la tabella \textit{Pianta} si preferisce tenere le tabelle separate per non avere un numero eccessivo di colonne in una sola tabella, inoltre non tutte le operazioni che coinvolgono la tabella \textit{Pianta} hanno bisogno delle informazioni contenute in \textit{Tassonomia} e \textit{descrizione}, d'altra parte la tabella \textit{Pianta} viene coinvolta in tutte le operazioni e si preferisce tenere in quest'ultima il minor numero di informazioni possibile.
+L'informazione contenuta nella tabella \textit{Lista Rossa} anch'essa potrebbe essere salvata aggiungendo delle colonne alla tabella \textit{Pianta} ma ciò non sarebbe conveniente infatti porterebbe ad un introduzione di molti valori null (circa $10^3$) nella colonna categoria,inoltre vi sono delle operazioni che coinvolgono esclusivamente le piante presenti nelle liste rosse, si ritiene perciò una soluzione migliore tenere le due tabelle separate. Infine la primary key per la tabella \textit{Tassonomia} è l'id della pianta (esterno). \newline 
+Rispetto allo schema concettuale ristrutturato si osserva che: 
+\begin{enumerate}
+    \item 
+        Le entità Tipo corologico e forma biologica sono state accorpate a \textit{Pianta}, in quanto in relazione uno a molti
+        (ogni pianta ha un unico tipo corologico e un unica forma biologica, esistono più piante con la stessa forma biologica e lo stesso tipo corologico)
+    \item 
+        Le relazioni molti  a molti distribuzione e conservazione sono diventate delle tabelle.
+\end{enumerate}
+\section{Normalizzazione}
+\begin{enumerate}
+    \item 
+        Prima forma normale: Il database è in prima forma normale in quanto tutte le colonne sono atomiche.
+    \item 
+        Seconda forma normale: Il database è in seconda forma normale in quanto ciascuna colonna dipende dalla primary key.
+    \item 
+        Terza forma normale: Non tutte le colonne sono indipendenti tra di loro: nella tabella \textit{Parco Botanico} l'attributo CAP dipende dall'attributo Città e dall'attributo Regione. Per normalizzare sarebbe necessario aggiungere una tabella di lookup che permetta di calcolare il CAP, il vantaggio che comporterebbe questa azione non giustificherebbe la complicazione del database. Si sceglie perciò di \textbf{non} rispettare la terza forma normale.
+\end{enumerate}
+\section{Progettazione fisica}
+Si è supposto che l'operazione più frequente sia quella di cercare le piante filtrando per classe, ordine, famiglia, sotto-famiglia, genere e specie. Si noti che la tabella \textit{Tassonomia} ha esattamente lo stesso numero di righe della Tabella \textit{Pianta } e che queste vengono riempite con circa $10^4$ righe durante la creazione del database e non vi sono operazioni che ne prevedono l'aggiornamento, ciò non significa che non si possa aggiungere una nuova pianta o rimuoverne una estinta ma la frequenza di queste operazioni è trascurabile rispetto alla frequenza delle operazioni di lettura. \newline
+Date queste considerazioni si decide di aggiungere degli indici secondari sugli attributi della Tabella \textit{Tassonomia} con l'obbiettivo di velocizzare le ricerche basate su di essa.
+\section{SQL}
+In questa sezione si riportano alcune stored procedure e alcuni trigger.
+\subsection{Stored Procedure}
+\begin{itemize}
+    \item 
+La seguente stored procedure mostra il totale di piante endemiche e la proporzione di piante rispetto al numero totale di piante presenti nella lista rossa raggrupate per categoria di minaccia.
+\begin{lstlisting} [language = sql]
+DELIMITER $$
+CREATE PROCEDURE piante_minacciate()
+BEGIN
+    select sum(endemicita) as totale, 
+    sum(endemicita) / (select count(*) from Lista_Rossa) as proporzione,
+    categoria
+from 
+    Lista_Rossa
+group by
+    categoria;
+END $$
+DELIMITER ;
+\end{lstlisting}
+\item
+La seguente stored procedure prende in input il nome di una regione italiana e mostra il totale di piante endemiche presenti in quella regione e la proporzione di piante endemiche sulle totali.
+\begin{lstlisting} [language = sql]
+DELIMITER $$
+CREATE PROCEDURE piante_endemiche_per_regione(in nome_regione varchar(30))
+BEGIN
+select 
+	   count(*) as totale, 
+	   count(*) / (select count(*) from Distribuzione where regione = nome_regione ) 
+    as proporzione
+from 
+	   Pianta
+inner join 
+	   Distribuzione
+on 
+	   Pianta.id = Distribuzione.pianta
+where 
+	   tipo_corologico = 1
+and
+	   regione = nome_regione;
+END $$
+DELIMITER ;
+\end{lstlisting}
+\item La seguente stored procedure prende in input il nome di una regione e mostra tutti i parchi botanici presenti in quella regione fornendone città e indirizzo, inoltre mostra tutte le piante presenti in un parco e la tassonomia di queste.
+\begin{lstlisting} [language = sql]
+DELIMITER $$
+CREATE PROCEDURE mostra_parchi(in nome_regione varchar(30))
+BEGIN
+select 
+	nome_parco, 
+    citta,
+    via,
+    CAP,
+    Tassonomia.* 
+from
+	Parco_Botanico 
+inner join 
+	Conservazione 
+USING
+	(nome_parco, citta)
+inner join 
+	Pianta 
+on 
+	Conservazione.pianta = Pianta.id
+inner join 
+	Tassonomia
+on 
+	Tassonomia.pianta = Pianta.id
+where 
+	regione = nome_regione;
+END $$
+\end{lstlisting}
+\item La seguente stored procedure mostra la superficie totale riservata ai parchi botanici in ogni regione ordinata in maniera decrescente.
+\begin{lstlisting} [language = sql]
+DELIMITER $$
+CREATE PROCEDURE superficie_parchi()
+BEGIN
+select 
+	regione, 
+    sum(superficie) as area_parchi
+from 
+	Parco_Botanico 
+group by 
+	regione
+order by 
+	area_parchi
+desc;
+END $$
+DELIMITER ;
+\end{lstlisting}
+\item 
+La seguente stored procedure prende in input classe, ordine, famiglia, sotto-famiglia, genere e specie e mostra i percorsi del file descrizione e di tutte le immagini associate. Se si passassero tutti gli input saremmo in grado di mostrare una sola pianta alla volta (la tabella potrebbe avere comunque più di una riga poiché le immagini potrebbero essere molteplici) per evitare ciò si adotta la seguente convenzione: passando in input un valore null e.g. per 'ordine' allora l'attributo 'ordine' non verrà filtrato e verranno prese tutte le righe indipendentemente dall'ordine.
+\begin{lstlisting} [language = sql]
+DELIMITER $$
+CREATE PROCEDURE mostra_immagini_e_descrizione(
+    IN p_classe VARCHAR(50),
+    IN p_ordine VARCHAR(50),
+    IN p_famiglia VARCHAR(50), 
+    IN p_sotto_famiglia VARCHAR(50), 
+    IN p_genere VARCHAR(50),
+    IN p_specie VARCHAR(50))
+BEGIN
+    SELECT 
+        Immagine.percorso AS img_percorso, 
+        Descrizione.percorso AS desc_percorso
+    FROM 
+        Tassonomia
+    INNER JOIN 
+        Pianta ON Tassonomia.pianta = Pianta.id
+    INNER JOIN
+        Descrizione ON Pianta.id = Descrizione.pianta
+    INNER JOIN
+        Immagine ON Pianta.id = Immagine.pianta
+    WHERE 
+        (p_classe IS NULL OR classe = p_classe) 
+    AND
+        (p_ordine IS NULL OR ordine = p_ordine)
+    AND
+        (p_famiglia IS NULL OR famiglia = p_famiglia)
+    AND
+        (p_sotto_famiglia IS NULL OR sotto_famiglia = p_sotto_famiglia)
+    AND
+        (p_genere IS NULL OR genere = p_genere)
+    AND 
+        (p_specie is NULL OR specie = p_specie);
+END $$
+DELIMITER ;
+\end{lstlisting}
+\subsection{Trigger}
+\item Il seguente trigger controlla, prima di un inserimento nella tabella \textit{Pianta}, che la forma biologica sia valida.
+\begin{lstlisting} [language = sql]
+DELIMITER $$
+CREATE TRIGGER Controlla_forma_biologica
+BEFORE INSERT ON 
+    Pianta
+FOR EACH ROW 
+BEGIN
+    IF NEW.forma_biologica NOT IN (
+        'NP', 'P scap', 'P caespn', 'P liann', 'P succ', 'P ep', 'P rept',
+        'Ch suffr', 'Ch scap', 'Ch succ', 'Ch pulv', 'Ch frut', 'Ch rept',
+        'H caesp', 'H rept', 'H scap', 'H ros', 'H bienn', 'H scand',
+        'G rad', 'G bulb', 'G rhiz', 'G par', 'I rad', 'I nat',
+        'T caesp', 'T rept', 'T scap', 'T ros', 'T par'
+    ) THEN
+        SIGNAL SQLSTATE '45001' SET MESSAGE_TEXT = 'Forma biologica non valida';
+    END IF;
+END$$
+DELIMITER ;
+\end{lstlisting}
+\item Il seguente trigger controlla, prima di un inserimento nella tabella \textit{Lista Rossa}, che la categoria sia valida.
+\begin{lstlisting} [language = sql]
+DELIMITER $$ 
+CREATE TRIGGER Lista_Rossa
+BEFORE insert ON Lista_Rossa
+FOR EACH ROW 
+BEGIN
+    IF NEW.categoria NOT IN
+    ('CR', 'EN', 'VU', 'NT', 'LC', 'DD')
+	THEN
+        SIGNAL SQLSTATE '45002' SET MESSAGE_TEXT = 'Categoria non valida';
+    END IF;
+END$$
+DELIMITER ;
+\end{lstlisting}
+\end{itemize}
+\section{Python}
+In questa sezione si riporta uno script python che si connette al database e chiama la stored procedure dell'operazione che si è supposta più frequente. Inoltre semplifica la chiamata della store procedure mascherando la convenzione sui valori null: Sarà sufficiente passare solamente i parametri per i quali si vuole filtrare.
+\vspace{0.5 cm}
+\begin{lstlisting}[language=python]
+import mysql.connector
+from mysql.connector import Error
+
+def mostra_piante(classe:str = None, ordine:str = None, famiglia:str = None, sotto_famiglia:str = None, genere:str = None, specie:str = None):
+    args = [classe, ordine, famiglia, sotto_famiglia, genere, specie]
+    #verifico che gli input siano stringhe
+    for element in args:
+        if item is not None:
+            if not isinstance(item, str):
+                print('input non valido')
+                return
+    cursor = None
+    conn = None
+    try:
+        # Stabilisco la connessione al database
+        conn = mysql.connector.connect(
+            user='utente1',
+            password='SecureP4ssword!',
+            database='floraitaliana',
+            host='localhost'
+        )
+
+        cursor = conn.cursor()
+        #chiamo la stored procedure
+        cursor.callproc('mostra_immagini_e_descrizione', args)
+        results = []
+        for result in cursor.stored_results():
+            results.append(result.fetchall())
+        return results
+    except Error as e:
+        print(e)
+    #chiudo la connessione
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+if __name__ == '__main__':
+        try:
+#se non riceve nessun inpunt mostra tutte le immagini di tutte le piante
+            risultati = mostra_piante()
+            if risultati is not None:
+                for risultato in risultati:
+                    print(risultato)
+        except Error as e:
+            print(e)
+            
+\end{lstlisting}
+\section{Bibliografia}
+\printbibliography
+\end{document}
+\end{document}
