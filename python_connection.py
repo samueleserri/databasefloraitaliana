@@ -3,6 +3,11 @@ from mysql.connector import Error
 
 def mostra_piante(classe = None, ordine = None, famiglia = None, sotto_famiglia = None, genere = None, specie = None):
     args = [classe, ordine, famiglia, sotto_famiglia, genere, specie]
+    for element in args:
+        if item is not None:
+            if not isinstance(item, str):
+                print('input non valido')
+                return
     cursor = None
     conn = None
     try:
@@ -31,6 +36,11 @@ def mostra_piante(classe = None, ordine = None, famiglia = None, sotto_famiglia 
             conn.close()
 
 if __name__ == '__main__':
-    risultati = mostra_piante()
-    for risultato in risultati:
-        print(risultato)
+        try:
+#se non riceve nessun inpunt mostra tutte le immagini di tutte le piante
+            risultati = mostra_piante()
+            if risultati is not None:
+                for risultato in risultati:
+                    print(risultato)
+        except Error as e:
+            print(e)
