@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 
-def mostra_piante(classe = None, ordine = None, famiglia = None, sotto_famiglia = None, genere = None, specie = None):
+def mostra_piante(classe:str = None, ordine:str = None, famiglia:str = None, sotto_famiglia:str = None, genere:str = None, specie:str = None):
     args = [classe, ordine, famiglia, sotto_famiglia, genere, specie]
     for element in args:
         if item is not None:
