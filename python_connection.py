@@ -25,8 +25,6 @@ def mostra_piante(classe:str = None, ordine:str = None, famiglia:str = None, sot
         results = []
         for result in cursor.stored_results():
             results.append(result.fetchall())
-        return results
-
     except Error as e:
         print(e)
     finally:
@@ -34,6 +32,7 @@ def mostra_piante(classe:str = None, ordine:str = None, famiglia:str = None, sot
             cursor.close()
         if conn:
             conn.close()
+    return results
 
 if __name__ == '__main__':
         try:
